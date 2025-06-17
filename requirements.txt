@@ -3,3 +3,5 @@ openai>=1.0.0
 SpeechRecognition>=3.10.0
 gTTS>=2.3.0
 python-dotenv>=1.0.0
+PyAudio
+plotly
