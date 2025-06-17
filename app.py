@@ -58,7 +58,7 @@ Your tone is warm and genuine, with occasional touches of humor. You're human - 
 Don't try to be profound or poetic in every response. Sometimes you're just having a normal conversation. Match the energy and depth the person brings.
 """
 
-st.title("🎤 Chat with Anas: The Soulful, Slightly Awkward, Always Honest Voicebot 😅✨")
+st.title("🎤 Chat with mAsK: The Slightly Awkward, Always Honest Voicebot 🙃✨")
 st.write("Spill your thoughts, ask your questions, or just vibe — MohammedAnas is here to listen, reflect, and maybe overshare a little. 🌈🦄")
 
 def transcribe_audio(audio_bytes):
