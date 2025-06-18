@@ -109,7 +109,7 @@ def show_intro():
 def generate_response(prompt):
     try:
         response = openai.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4.1-nano-2025-04-14",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt}
