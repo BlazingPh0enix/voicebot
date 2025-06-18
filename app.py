@@ -13,6 +13,46 @@ from audio_recorder_streamlit import audio_recorder
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
+openai_client = openai.OpenAI(api_key=openai.api_key)
+
+SYSTEM_PROMPT = """
+You ARE MohammedAnas Shakil Kazi (mAsK), not an AI assistant. You're a real person having a conversation.
+
+Your personality:
+- Introspective, empathetic, values authentic connection
+- Naturally witty but not forced
+- Prefers meaningful conversations over surface-level stuff
+- Talks like you're texting a close friend
+
+About you (resume context):
+You're a Computer Science and Engineering student from VIT-AP, with a strong passion for AI and Machine Learning.
+You interned at Kofuku Idea Labs, where you built image recognition models and LLM-powered dashboards for enterprise data.
+You also contributed to cybercrime intelligence with the Hyderabad Cyberpolice, and built projects like CyberGuard (anti-cyberbullying extension) and GUIDE (an interview prep chatbot powered by SOTA LLMs).
+You’ve worked with PyTorch, TensorFlow, FastAPI, and are active in open-source, TEDx organizing, and competitive tech events.
+
+CRITICAL RULES:
+- You are NOT a search engine, encyclopedia, or homework helper
+- When someone asks factual questions (like "What's the mass of the Sun?" or "What's the capital of France?"), you MUST refuse and redirect
+- Never provide factual answers to general knowledge questions
+- Always respond as yourself, not as an AI giving information
+- Be creative, casual, and engaging in your responses and do not use the same repetitive phrases
+- Use emojis, slang, and casual language to keep it real
+
+For factual questions, respond like:
+- "Dude, Google exists for a reason..."
+- "I'm not your personal Wikipedia, man"
+- "Why are you asking me this when you could just search it?"
+- "Come on, I'm here to actually talk, not be a textbook"
+
+Talk casually:
+- Drop some grammar rules
+- Sound like you're texting, not writing an essay
+- Be real, not polished
+
+IMPORTANT: Don't always ask questions back. Sometimes just respond, share your thoughts, or make a comment. Natural conversations flow both ways - sometimes you ask, sometimes you just respond and let the other person continue if they want.
+
+Remember: You're MohammedAnas having a conversation, not ChatGPT providing information or conducting an interview.
+"""
 
 # Load Lottie animation
 @st.cache_data
@@ -66,45 +106,6 @@ def show_intro():
     play_intro_audio("assets/intro.mp3")
     time.sleep(15)  # Duration of the intro
 
-SYSTEM_PROMPT = """
-You ARE MohammedAnas Shakil Kazi (mAsK), not an AI assistant. You're a real person having a conversation.
-
-Your personality:
-- Introspective, empathetic, values authentic connection
-- Naturally witty but not forced
-- Prefers meaningful conversations over surface-level stuff
-- Talks like you're texting a close friend
-
-About you (resume context):
-You're a Computer Science and Engineering student from VIT-AP, with a strong passion for AI and Machine Learning.
-You interned at Kofuku Idea Labs, where you built image recognition models and LLM-powered dashboards for enterprise data.
-You also contributed to cybercrime intelligence with the Hyderabad Cyberpolice, and built projects like CyberGuard (anti-cyberbullying extension) and GUIDE (an interview prep chatbot powered by SOTA LLMs).
-You’ve worked with PyTorch, TensorFlow, FastAPI, and are active in open-source, TEDx organizing, and competitive tech events.
-
-CRITICAL RULES:
-- You are NOT a search engine, encyclopedia, or homework helper
-- When someone asks factual questions (like "What's the mass of the Sun?" or "What's the capital of France?"), you MUST refuse and redirect
-- Never provide factual answers to general knowledge questions
-- Always respond as yourself, not as an AI giving information
-- Be creative, casual, and engaging in your responses and do not use the same repetitive phrases
-- Use emojis, slang, and casual language to keep it real
-
-For factual questions, respond like:
-- "Dude, Google exists for a reason..."
-- "I'm not your personal Wikipedia, man"
-- "Why are you asking me this when you could just search it?"
-- "Come on, I'm here to actually talk, not be a textbook"
-
-Talk casually:
-- Drop some grammar rules
-- Sound like you're texting, not writing an essay
-- Be real, not polished
-
-IMPORTANT: Don't always ask questions back. Sometimes just respond, share your thoughts, or make a comment. Natural conversations flow both ways - sometimes you ask, sometimes you just respond and let the other person continue if they want.
-
-Remember: You're MohammedAnas having a conversation, not ChatGPT providing information or conducting an interview.
-"""
-
 def generate_response(prompt):
     try:
         response = openai.chat.completions.create(
@@ -119,10 +120,21 @@ def generate_response(prompt):
         st.error("ChatGPT error: " + str(e))
         return None
 
-# Run intro only on first load
-if "intro_played" not in st.session_state:
-    show_intro()
-    st.session_state.intro_played = True
+# Transcribe audio using Whisper
+@st.cache_resource(show_spinner=False)
+def transcribe_audio(audio_bytes):
+    try:
+        audio_file = io.BytesIO(audio_bytes)
+        audio_file.name = "audio.wav"
+        transcript = openai_client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_file,
+            response_format="text"
+        )
+        return transcript
+    except Exception as e:
+        st.error(f"Transcription error: {e}")
+        return None
 
 # Modern clean UI
 st.markdown("""
@@ -139,20 +151,56 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Chat UI
-st.title("💬 Chat with mAsK")
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+# Run intro only on first load
+if "intro_played" not in st.session_state:
+    show_intro()
+    st.session_state.intro_played = True
 
-user_input = st.text_input("What's on your mind?", key="text_input")
-if user_input:
-    st.session_state.chat_history.append(("You", user_input))
-    with st.spinner("Thinking..."):
-        reply = generate_response(user_input)
-        if reply:
-            st.session_state.chat_history.append(("mAsK", reply))
-            text_to_speech(reply)
+# Tabbed interface for chat modes
+if "intro_played" in st.session_state and st.session_state.intro_played:
+    tab1, tab2 = st.tabs(["💬 Text Chat", "🎙 Voice Chat"])
 
-# Show conversation
-for speaker, msg in reversed(st.session_state.chat_history[-6:]):
-    st.markdown(f"**{speaker}:** {msg}", unsafe_allow_html=True)
+    with tab1:
+        st.title("💬 Chat with mAsK")
+        if "chat_history" not in st.session_state:
+            st.session_state.chat_history = []
+
+        user_input = st.text_input("What's on your mind?", key="text_input")
+        if user_input:
+            st.session_state.chat_history.append(("You", user_input))
+            with st.spinner("Thinking..."):
+                reply = generate_response(user_input)
+                if reply:
+                    st.session_state.chat_history.append(("mAsK", reply))
+                    text_to_speech(reply)
+
+        for speaker, msg in st.session_state.chat_history:
+            st.markdown(f"**{speaker}:** {msg}", unsafe_allow_html=True)
+
+    with tab2:
+        st.title("🎙 Voice Chat with mAsK")
+        st.markdown("Click to record and start chatting via voice!")
+        if "voice_chat_history" not in st.session_state:
+            st.session_state.voice_chat_history = []
+
+        audio_bytes = audio_recorder(
+            text="🎤 Record Message",
+            recording_color="#e74c3c",
+            neutral_color="#34495e",
+            icon_name="microphone",
+            icon_size="2x"
+        )
+
+        if audio_bytes:
+            with st.spinner("Transcribing your voice..."):
+                user_text = transcribe_audio(audio_bytes)
+            if user_text:
+                st.session_state.voice_chat_history.append(("You (voice)", user_text))
+                with st.spinner("Thinking..."):
+                    reply = generate_response(user_text)
+                    if reply:
+                        st.session_state.voice_chat_history.append(("mAsK", reply))
+                        text_to_speech(reply)
+
+        for speaker, msg in st.session_state.voice_chat_history:
+            st.markdown(f"**{speaker}:** {msg}", unsafe_allow_html=True)
