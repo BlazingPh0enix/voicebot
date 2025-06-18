@@ -1,22 +1,16 @@
 # 🎭 mAsK Voicebot
 
-A soulful AI companion with customizable dark themes and audio visualization.
+A sophisticated AI companion powered by RAG (Retrieval-Augmented Generation) and ElevenLabs voice synthesis.
 
 ## ✨ Features
 
-- **🎨 Customizable Dark Themes**: Choose from 5 beautiful color schemes
-- **🔊 Audio Visualizer**: Real-time circular waveform visualization
-- **💬 Dual Interface**: Text chat and voice chat modes
-- **🎭 Personality**: MohammedAnas Shakil Kazi (mAsK) - An INFP companion
-- **🌙 Dark Mode**: Elegant dark interface with neon accents
-
-## 🎨 Available Themes
-
-1. **Cyber Green** - Matrix-inspired green glow
-2. **Electric Blue** - Cool blue cyberpunk vibes  
-3. **Purple Haze** - Mystical purple energy
-4. **Sunset Orange** - Warm orange ambient
-5. **Ice Blue** - Cool cyan aesthetics
+- **👋 Interactive Intro**: Engaging voice introduction with animated welcome sequence
+- **🤖 RAG System**: Contextual responses based on personal knowledge base
+- **�️ ElevenLabs Voice**: High-quality text-to-speech for natural conversations
+- **💬 Smart Chat**: Context-aware conversations with memory
+- **🎭 Authentic Personality**: MohammedAnas Shakil Kazi (mAsK) - A real persona
+- **🔊 Voice Interaction**: Record and receive voice responses
+- **� Knowledge Base**: Integrated with personal resume and experiences
 
 ## 🚀 Quick Start
 
@@ -29,38 +23,48 @@ pip install -r requirements.txt
 Create a `.env` file in the project directory:
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
-HOUNDIFY_CLIENT_ID=your_houndify_id_here (optional)
-HOUNDIFY_CLIENT_KEY=your_houndify_key_here (optional)
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 ```
 
 ### 3. Run the App
 ```bash
-python run_voicebot.py
+streamlit run app.py
 ```
 
-Or directly with Streamlit:
+For voice interaction features:
 ```bash
-streamlit run app_frontend.py
+streamlit run app_elevenlabs.py
 ```
 
 ## 📁 Project Structure
 
 ```
 Voicebot/
-├── app_frontend.py      # Main UI with themes and visualizer
-├── backend.py           # AI logic and speech processing
-├── run_voicebot.py      # Launcher script
-├── requirements.txt     # Dependencies
-├── .env                # API keys (create this)
-├── temp_audio/         # Temporary audio files
-└── README.md           # This file
+├── app.py             # Main chat application with RAG
+├── app_elevenlabs.py  # Voice-enabled version with ElevenLabs
+├── rag_system.py      # RAG system implementation
+├── my_resume.txt      # Knowledge base content
+├── requirements.txt   # Dependencies
+├── .env              # API keys (create this)
+├── faiss_index/      # Vector store for RAG system
+│   ├── index.faiss   # FAISS vector database
+│   └── index.pkl     # Pickle file for embeddings
+└── README.md         # This file
 ```
 
-## 🎤 Voice Features
+## 🤖 System Features
 
-- **Speech-to-Text**: Powered by Houndify (with fallback)
-- **Text-to-Speech**: Google Text-to-Speech (gTTS)
-- **Audio Visualizer**: Real-time waveform during listening/thinking
+### RAG System
+- **Vector Store**: FAISS-based efficient similarity search
+- **Knowledge Base**: Personal resume and experience integration
+- **Context Awareness**: Retrieves relevant information for responses
+- **Memory**: Maintains conversation context
+
+### Voice Features
+- **Welcome Sequence**: Engaging introduction with animations
+- **Voice Input**: Record voice messages for conversation
+- **ElevenLabs TTS**: High-quality voice synthesis
+- **Interactive UI**: Dynamic elements during voice playback
 
 ## 💬 Chat Features
 
@@ -99,7 +103,8 @@ Themes can be selected from the sidebar. Each theme includes:
 - **VoicebotBackend Class**: Handles all AI and audio processing
 - **OpenAI Integration**: GPT models for conversations
 - **Speech Recognition**: Houndify with fallbacks
-- **Text-to-Speech**: gTTS with temporary file management
+- **Text-to-Speech**: ElevenLabs API integration for natural voice output
+- **Welcome Sequence**: Interactive introduction with animations
 - **Error Handling**: Graceful fallbacks for all operations
 
 ### Frontend (`app_frontend.py`)
@@ -111,35 +116,48 @@ Themes can be selected from the sidebar. Each theme includes:
 
 ## 🛠️ Development
 
-### Adding New Themes
-1. Add theme config to `THEMES` dict in `app_frontend.py`
-2. Define primary, secondary, accent, background, surface colors
-3. Theme automatically applies to all UI elements
+### Enhancing RAG System
+- Add new documents to knowledge base
+- Customize embedding models
+- Implement additional retrieval strategies
+- Optimize vector store performance
 
-### Customizing Visualizer
-- Modify `create_audio_visualizer()` function
-- Adjust waveform generation in `np.random.normal()`
-- Change circle radius, animation, or add new effects
+### Voice Integration
+- Configure ElevenLabs voice settings
+- Implement additional voice models
+- Enhance voice recording quality
+- Add real-time transcription
 
-### Extending Backend
-- Add new AI models in `generate_response()`
-- Implement additional speech services
-- Add voice cloning or custom TTS
+### Extending Features
+- Add new conversation capabilities
+- Implement additional API integrations
+- Enhance memory management
+- Improve context handling
 
 ## 📋 Requirements
 
 - Python 3.8+
 - Streamlit 1.28+
 - OpenAI API key
-- Microphone access (for voice features)
+- ElevenLabs API key
+- FAISS for vector storage
 - Internet connection
+- Microphone access (for voice features)
 
 ## 🐛 Troubleshooting
 
-### Audio Issues
-- **No microphone detected**: Check system audio permissions
-- **Poor speech recognition**: Try using text chat instead
-- **No audio playback**: Check browser audio settings
+### Common Issues
+
+#### RAG System
+- **Vector store not initialized**: Run the app once to create FAISS index
+- **Knowledge retrieval issues**: Check if knowledge base is properly loaded
+- **Slow responses**: Optimize chunk size and embedding configuration
+
+#### Voice Features
+- **No intro voice**: Verify ELEVENLABS_API_KEY in .env file
+- **Recording issues**: Check microphone permissions
+- **Playback problems**: Verify browser audio settings
+- **Animation glitches**: Try refreshing the page
 
 ### API Issues  
 - **OpenAI errors**: Verify API key in `.env` file
