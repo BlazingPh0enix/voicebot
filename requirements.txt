@@ -10,3 +10,4 @@ deepgram-sdk
 websockets
 streamlit-webrtc
 streamlit-lottie
+audio-recorder-streamlit
