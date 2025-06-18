@@ -1,0 +1,94 @@
+MohammedAnas Shakil Kazi
+📍 Gujarat, India, 382007
+📞 +91 85114-02867
+📧 anaskazi.mask@gmail.com
+
+Profiles
+GitHub: https://github.com/BlazingPh0enix
+LinkedIn: https://www.linkedin.com/in/mohammedanas-kazi-88a064216/
+
+Summary
+Motivated and results-oriented Computer Science and Engineering student with a focus on Artificial Intelligence and Machine Learning.
+Proficient in Python, TensorFlow, PyTorch, and building cutting-edge Generative AI applications.
+Adept at crafting innovative AI solutions to enhance accessibility and empower independence.
+Driven to apply technical expertise and strategic problem-solving to deliver impactful, real-world projects.
+
+
+Experience
+
+Kofuku Idea Labs – Machine Learning Engineer
+Jan 2025 – May 2025, Hyderabad, Telangana
+
+Developed an image recognition model using EfficientNetV2-L to identify Indian bank logos with 94% accuracy.
+Contributed to a CyberCrime intelligence project with Hyderabad Cyberpolice, building API endpoints to process mobile location data, extract transaction-level insights, and generate a map-based visualization for fraud detection.
+Worked at Unerth.ai on building LLM-powered dashboards, enabling users to interact with enterprise data via conversational AI, AI agents, and no-code visualizations integrated with CRMs, ERPs, and databases.
+
+Smytten, Octavos Enterprise Solutions – Inventory Management and Planning Intern
+Sep 2023 – Nov 2023, Ahmedabad, Gujarat, India
+
+Reduced errors by 10% through revised MRPs and improved product quality control.
+Optimized inventory processes to enhance operational efficiency and accuracy.
+Collaborated with team members to streamline workflows and implement best practices.
+
+Open Source Community – Club Secretary
+May 2023 – May 2024, Amaravati, Andhra Pradesh, India
+
+Increased member engagement by 25% through effective communication and event coordination.
+Streamlined operations and enhanced organizational efficiency by 20%.
+Fostered a positive and collaborative environment, leading to higher member retention and satisfaction.
+
+
+Certifications
+
+Google Cloud Computing Foundation – Google, Dec 2023
+
+MERN Full Stack – Ethnus, Nov 2023
+
+
+Education
+
+Vellore Institute of Technology, AP
+Bachelor of Technology (B.Tech), Computer Science and Engineering (Spec. in AI & ML)
+Aug 2021 – Present
+CGPA: 8.7
+
+Hosted 2 consecutive successful TEDx events at the university.
+Achieved 2nd place in the National Level Hash Breaker Challenge.
+
+
+Projects
+
+GUIDE – Guidance for Ultimate Interview Drills and Exercises
+Mar 2025 – Present
+
+Developing an AI-powered Interview Preparation Chatbot that accepts resumes and tailors questions to specific job roles.
+Creating a user-friendly frontend and incorporating a voice chat option for realistic interview simulations.
+Utilizing a SoTA-LLM to deliver dynamic, personalized interview experiences.
+
+CyberGuard
+Aug 2024 – Nov 2024
+
+Developed a browser extension to detect and flag instances of cyberbullying in real-time on social media platforms.
+Implemented a Bi-directional LSTM (BLSTM) architecture for enhanced text analysis.
+Curated datasets from Reddit, Kaggle, etc., and fine-tuned the model for better detection accuracy.
+
+Website ChatBot
+July 2024
+
+Built a chatbot for a wine-making company's website during an internship.
+Used Google’s Vertex Agent Builder to fine-tune models for FAQs and appointments.
+
+
+Skills
+
+Programming Languages:
+Python, MySQL, HTML, CSS
+
+Frameworks/Libraries:
+PyTorch, TensorFlow, Pandas, NumPy, FastAPI
+
+Tools:
+Git
+
+Languages:
+English, Hindi, Arabic

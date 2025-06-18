@@ -1,4 +1,4 @@
 .env
 .venv/
-temp_audio/
+faiss_index/
 __pycache__/
