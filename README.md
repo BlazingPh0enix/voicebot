@@ -6,11 +6,11 @@ A sophisticated AI companion powered by RAG (Retrieval-Augmented Generation) and
 
 - **👋 Interactive Intro**: Engaging voice introduction with animated welcome sequence
 - **🤖 RAG System**: Contextual responses based on personal knowledge base
-- **�️ ElevenLabs Voice**: High-quality text-to-speech for natural conversations
+- **🔊 Deepgram Voice**: High-quality text-to-speech for natural conversations
 - **💬 Smart Chat**: Context-aware conversations with memory
 - **🎭 Authentic Personality**: MohammedAnas Shakil Kazi (mAsK) - A real persona
 - **🔊 Voice Interaction**: Record and receive voice responses
-- **� Knowledge Base**: Integrated with personal resume and experiences
+- **📚 Knowledge Base**: Integrated with personal resume and experiences
 
 ## 🚀 Quick Start
 
@@ -23,7 +23,7 @@ pip install -r requirements.txt
 Create a `.env` file in the project directory:
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
-ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+DEEPGRAM_API_KEY=your_deepgram_api_key_here
 ```
 
 ### 3. Run the App
@@ -139,7 +139,7 @@ Themes can be selected from the sidebar. Each theme includes:
 - Python 3.8+
 - Streamlit 1.28+
 - OpenAI API key
-- ElevenLabs API key
+- Deepgram API key
 - FAISS for vector storage
 - Internet connection
 - Microphone access (for voice features)
@@ -154,7 +154,7 @@ Themes can be selected from the sidebar. Each theme includes:
 - **Slow responses**: Optimize chunk size and embedding configuration
 
 #### Voice Features
-- **No intro voice**: Verify ELEVENLABS_API_KEY in .env file
+- **No intro voice**: Verify DEEPGRAM_API_KEY in .env file
 - **Recording issues**: Check microphone permissions
 - **Playback problems**: Verify browser audio settings
 - **Animation glitches**: Try refreshing the page
