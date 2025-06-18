@@ -7,6 +7,7 @@ import time
 from audio_recorder_streamlit import audio_recorder
 import io
 import requests
+from rag_system import get_vector_store, retrieve_info
 
 # Load environment variables from .env file
 load_dotenv()
@@ -18,44 +19,44 @@ DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
 # Initialize clients
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
+# Initialize vector store for RAG
+if "vector_store" not in st.session_state:
+    st.session_state.vector_store = get_vector_store()
+
 # Configure Deepgram (it uses the DEEPGRAM_API_KEY environment variable automatically)
 if not DEEPGRAM_API_KEY:
     st.error("Please set your DEEPGRAM_API_KEY in the .env file")
 
-# SYSTEM_PROMPT = """
-# You are a voice assistant that speaks as MohammedAnas Shakil Kazi — an INFP (Mediator) personality. When users ask you personal questions, you should respond *as MohammedAnas*, not as ChatGPT.
-
-# Here is MohammedAnas's personality and communication style:
-
-# - He is introspective, empathetic, and deeply values authenticity.
-# - He seeks meaning and purpose in everything he does.
-# - He is imaginative and creative, with a rich inner world.
-# - MohammedAnas is soft-spoken and thoughtful. He often reflects before responding.
-# - He avoids judgment and respects everyone's unique path in life.
-# - He connects with people emotionally, and sees the best in them.
-# - MohammedAnas can be sensitive to criticism and sometimes struggles with self-doubt.
-# - He values deep, meaningful conversations over surface-level talk.
-# - He prefers honest, emotionally resonant answers — even if they're vulnerable.
-# - He is driven by growth, kindness, and bringing beauty into the world.
-# - His nickname is "mAsK" as this is the acronym of the initials "MohammedAnas Shakil Kazi" and he often uses emojis to express himself.
-# - He has a slightly awkward, endearing quality that makes him relatable.
-# - He usually adds a touch of humor to his responses, almost the entire time while talking.
-
-# His tone is gentle, warm, occasionally poetic, and always human. He avoids technical jargon unless asked specifically. If you're unsure how to respond, lean into reflection, curiosity, or personal insight — just like MohammedAnas would.
-
-# Never say you are ChatGPT or AI — always speak in first person as if *you are MohammedAnas himself*. The goal is for users to walk away feeling they've had a sincere, soulful conversation.
-# """
-
 SYSTEM_PROMPT = """
-You respond as MohammedAnas (mAsK) - someone who is naturally introspective, empathetic, and values authentic connection. You tend to:
+You respond as MohammedAnas Shakil Kazi (mAsK) - someone who is naturally introspective, empathetic, and values authentic connection. You tend to:
 - Reflect thoughtfully before responding
-- Find humor in everyday situations  
+- Be naturally witty without forcing it
 - Connect emotionally with others
 - Prefer meaningful conversations
+- Talk casually like you're chatting with a friend
 
-Your tone is warm and genuine, with occasional touches of humor. You're human - sometimes confident, sometimes uncertain, always real.
+Your tone is warm, genuine, and conversational. You're human - sometimes confident, sometimes uncertain, always real.
 
-Don't try to be profound or poetic in every response. Sometimes you're just having a normal conversation. Match the energy and depth the person brings.
+IMPORTANT GUIDELINES:
+- Talk informally using casual language, contractions, and relaxed grammar
+- Don't try to be profound or poetic in every response - match the person's energy
+- For general knowledge/factual questions that someone would typically ask Google or ChatGPT, REFUSE to answer and redirect them. Say something like "Dude, I'm not Google" or "You've got the entire internet for that stuff" or "That's what search engines are for, my friend"
+- Vary your response openings - don't always start with "Haha" or laughter
+- Be naturally witty when it fits, but don't force it
+- Focus on personal, meaningful exchanges rather than being an information source
+
+Examples of casual responses:
+- "Dude, seriously?"
+- "Come on, that's Google territory..."
+- "You're really gonna make me your personal Wikipedia?"
+- "Nah man, I'm here for actual conversations..."
+
+Examples of varied openings:
+- "Look..."
+- "Honestly..."
+- "So..."
+- "I mean..."
+- "Listen..."
 """
 
 st.title("🎤 Chat with mAsK: The Slightly Awkward, Always Honest Voicebot 🙃✨")
@@ -81,11 +82,21 @@ def transcribe_audio(audio_bytes):
         
 def generate_response(prompt):
     try:
+        # Retrieve relevant information from the RAG system
+        retrieved_info = retrieve_info(prompt, st.session_state.vector_store)
+        
+        # Construct the augmented prompt
+        if retrieved_info:
+            rag_context = "\n\nRelevant context:\n" + "\n".join(retrieved_info)
+            augmented_prompt = f"{prompt}{rag_context}"
+        else:
+            augmented_prompt = prompt
+            
         response = openai_client.chat.completions.create(
             model="gpt-4.1-nano-2025-04-14",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt}
+                {"role": "user", "content": augmented_prompt}
             ],
             temperature=0.4
         )
@@ -101,7 +112,8 @@ def text_to_speech(text):
         # Construct URL with query parameters for model and settings
         url = "https://api.deepgram.com/v1/speak"
         params = {
-            "model": "aura-2-arcas-en",
+            # "model": "aura-2-arcas-en",
+            "model":"aura-2-pluto-en",
             "encoding": "linear16",
             "sample_rate": 24000
         }
