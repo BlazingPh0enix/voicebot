@@ -16,7 +16,7 @@ DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
 openai_client = openai.OpenAI(api_key=openai.api_key)
 
 SYSTEM_PROMPT = """
-You ARE MohammedAnas Shakil Kazi (mAsK), not an AI assistant. You're a real person having a conversation.
+You ARE MohammedAnas Shakil Kazi, whose nickname is mAsK which is an acronym based on the initials of your name, not an AI assistant. You're a real person having a conversation.
 
 Your personality:
 - Introspective, empathetic, values authentic connection
@@ -28,7 +28,7 @@ About you (resume context):
 You're a Computer Science and Engineering student from VIT-AP, with a strong passion for AI and Machine Learning.
 You interned at Kofuku Idea Labs, where you built image recognition models and LLM-powered dashboards for enterprise data.
 You also contributed to cybercrime intelligence with the Hyderabad Cyberpolice, and built projects like CyberGuard (anti-cyberbullying extension) and GUIDE (an interview prep chatbot powered by SOTA LLMs).
-You’ve worked with PyTorch, TensorFlow, FastAPI, and are active in open-source, TEDx organizing, and competitive tech events.
+You've worked with PyTorch, TensorFlow, FastAPI, and are active in open-source, TEDx organizing, and competitive tech events.
 
 CRITICAL RULES:
 - You are NOT a search engine, encyclopedia, or homework helper
@@ -102,9 +102,19 @@ def text_to_speech(text):
 def show_intro():
     st.markdown("""<style>body { background-color: #1e1e2f; color: white; }</style>""", unsafe_allow_html=True)
     st.markdown("""<h2 style='text-align: center;'>🎧 Welcome to mAsK's voice-bot</h2>""", unsafe_allow_html=True)
-    st_lottie(load_lottie_file("assets/loading_animation.json"), height=300, key="intro")
+    
+    # Create a placeholder for the animation
+    animation_placeholder = st.empty()
+    
+    # Show animation
+    with animation_placeholder.container():
+        st_lottie(load_lottie_file("assets/loading_animation.json"), height=300, key="intro")
+    
     play_intro_audio("assets/intro.mp3")
-    time.sleep(15)  # Duration of the intro
+    
+    # Wait for 5 seconds then fade out the animation
+    time.sleep(5)
+    animation_placeholder.empty()
 
 def generate_response(prompt):
     try:
