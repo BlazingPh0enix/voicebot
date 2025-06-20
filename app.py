@@ -86,17 +86,17 @@ def text_to_speech(text):
         "Content-Type": "application/json"
     }
     payload = {"text": text}
-    with requests.post(url, headers=headers, json=payload, params=params, stream=True) as response:
-        if response.status_code == 200:
-            audio_data = b"".join(response.iter_content(chunk_size=1024))
-            b64 = base64.b64encode(audio_data).decode()
-            st.markdown(f"""
-                <audio autoplay style="display:none;">
-                    <source src="data:audio/wav;base64,{b64}" type="audio/wav">
-                </audio>
-            """, unsafe_allow_html=True)
-        else:
-            st.error("TTS failed.")
+    response = requests.post(url, headers=headers, json=payload, params=params, stream=True)
+    if response.status_code == 200:
+        audio_data = b"".join(response.iter_content(chunk_size=1024))
+        b64 = base64.b64encode(audio_data).decode()
+        # Embed audio in Streamlit
+        st.markdown(f"""
+            <audio autoplay src="data:audio/wav;base64,{b64}" >
+            </audio>
+        """, unsafe_allow_html=True)
+    else:
+        st.error("TTS failed.")
 
 # Load animation and intro
 def show_intro():
