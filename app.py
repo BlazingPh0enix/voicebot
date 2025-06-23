@@ -101,20 +101,19 @@ def text_to_speech(text):
 # Load animation and intro
 def show_intro():
     st.markdown("""<style>body { background-color: #1e1e2f; color: white; }</style>""", unsafe_allow_html=True)
-    st.markdown("""<h2 style='text-align: center;'>🎧 Welcome to mAsK's voice-bot</h2>""", unsafe_allow_html=True)
-    
+    # Create a placeholder for the heading
+    heading_placeholder = st.empty()
+    heading_placeholder.markdown("""<h2 style='text-align: center;'>🎧 Welcome to mAsK's voice-bot</h2>""", unsafe_allow_html=True)
     # Create a placeholder for the animation
     animation_placeholder = st.empty()
-    
     # Show animation
     with animation_placeholder.container():
         st_lottie(load_lottie_file("assets/loading_animation.json"), height=300, key="intro")
-    
     play_intro_audio("assets/intro.mp3")
-    
-    # Wait for 5 seconds then fade out the animation
+    # Wait for 5 seconds then fade out the animation and heading
     time.sleep(5)
     animation_placeholder.empty()
+    heading_placeholder.empty()
 
 def generate_response(prompt):
     try:
