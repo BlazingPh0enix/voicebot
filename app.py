@@ -172,20 +172,29 @@ if "intro_played" in st.session_state and st.session_state.intro_played:
 
     with tab1:
         st.title("💬 Chat with mAsK")
+        # Use a list of dicts for chat history as per Streamlit docs
         if "chat_history" not in st.session_state:
             st.session_state.chat_history = []
 
-        user_input = st.text_input("What's on your mind?", key="text_input")
+        # Display chat messages from history
+        for message in st.session_state.chat_history:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
+        # Use st.chat_input for chat bar (auto-clears after sending)
+        user_input = st.chat_input("What's on your mind?")
         if user_input:
-            st.session_state.chat_history.append(("You", user_input))
+            # Add user message to chat history
+            st.session_state.chat_history.append({"role": "user", "content": user_input})
+            with st.chat_message("user"):
+                st.markdown(user_input)
             with st.spinner("Thinking..."):
                 reply = generate_response(user_input)
                 if reply:
-                    st.session_state.chat_history.append(("mAsK", reply))
+                    st.session_state.chat_history.append({"role": "assistant", "content": reply})
+                    with st.chat_message("ai"):
+                        st.markdown(reply)
                     text_to_speech(reply)
-
-        for speaker, msg in st.session_state.chat_history:
-            st.markdown(f"**{speaker}:** {msg}", unsafe_allow_html=True)
 
     with tab2:
         st.title("🎙 Voice Chat with mAsK")
