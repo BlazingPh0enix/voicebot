@@ -61,17 +61,6 @@ def load_lottie_file(path):
     with open(path, "r") as f:
         return json.load(f)
 
-# Intro audio playback from pre-recorded file
-def play_intro_audio(file_path):
-    with open(file_path, "rb") as audio_file:
-        audio_bytes = audio_file.read()
-        b64 = base64.b64encode(audio_bytes).decode()
-        st.markdown(f"""
-            <audio autoplay style="display:none;">
-                <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
-            </audio>
-        """, unsafe_allow_html=True)
-
 # Generate voice response using Deepgram
 @st.cache_resource(show_spinner=False)
 def text_to_speech(text):
@@ -109,7 +98,6 @@ def show_intro():
     # Show animation
     with animation_placeholder.container():
         st_lottie(load_lottie_file("assets/loading_animation.json"), height=300, key="intro")
-    play_intro_audio("assets/intro.mp3")
     # Wait for 5 seconds then fade out the animation and heading
     time.sleep(5)
     animation_placeholder.empty()
@@ -171,7 +159,7 @@ if "intro_played" in st.session_state and st.session_state.intro_played:
 
     with tab1:
         st.title("💬 Chat with mAsK")
-        # Use a list of dicts for chat history as per Streamlit docs
+        
         if "chat_history" not in st.session_state:
             st.session_state.chat_history = []
 
