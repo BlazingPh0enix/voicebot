@@ -1,16 +1,16 @@
 # 🎭 mAsK Voicebot
 
-A sophisticated AI companion powered by RAG (Retrieval-Augmented Generation) and ElevenLabs voice synthesis.
+A sophisticated AI companion powered by Deepgram's streaming text-to-speech and OpenAI's conversational AI.
 
 ## ✨ Features
 
-- **👋 Interactive Intro**: Engaging voice introduction with animated welcome sequence
-- **🤖 RAG System**: Contextual responses based on personal knowledge base
-- **🔊 Deepgram Voice**: High-quality text-to-speech for natural conversations
+- **👋 Interactive Intro**: Engaging animated welcome sequence with Lottie animations
+- **🤖 Conversational AI**: Contextual responses with authentic mAsK personality
+- **🔊 Streaming TTS**: Real-time text-to-speech using Deepgram's WebSocket API
 - **💬 Smart Chat**: Context-aware conversations with memory
-- **🎭 Authentic Personality**: MohammedAnas Shakil Kazi (mAsK) - A real persona
-- **🔊 Voice Interaction**: Record and receive voice responses
-- **📚 Knowledge Base**: Integrated with personal resume and experiences
+- **🎭 Authentic Personality**: MohammedAnas Shakil Kazi (mAsK) - A real persona, not an AI assistant
+- **🎙️ Voice Interaction**: Record and receive voice responses with seamless audio processing
+- **� Fallback System**: Robust error handling with automatic fallback to REST API
 
 ## 🚀 Quick Start
 
@@ -31,7 +31,7 @@ DEEPGRAM_API_KEY=your_deepgram_api_key_here
 streamlit run app.py
 ```
 
-For voice interaction features:
+The main app now features Deepgram streaming TTS. For the ElevenLabs version (if you prefer it):
 ```bash
 streamlit run app_elevenlabs.py
 ```
@@ -40,31 +40,34 @@ streamlit run app_elevenlabs.py
 
 ```
 Voicebot/
-├── app.py             # Main chat application with RAG
-├── app_elevenlabs.py  # Voice-enabled version with ElevenLabs
-├── rag_system.py      # RAG system implementation
-├── my_resume.txt      # Knowledge base content
+├── app.py             # Main application with streaming Deepgram TTS
+├── app_elevenlabs.py  # Alternative version with ElevenLabs TTS
 ├── requirements.txt   # Dependencies
 ├── .env              # API keys (create this)
-├── faiss_index/      # Vector store for RAG system
-│   ├── index.faiss   # FAISS vector database
-│   └── index.pkl     # Pickle file for embeddings
+├── assets/           # Static assets
+│   └── loading_animation.json  # Lottie animation
 └── README.md         # This file
 ```
 
 ## 🤖 System Features
 
-### RAG System
-- **Vector Store**: FAISS-based efficient similarity search
-- **Knowledge Base**: Personal resume and experience integration
-- **Context Awareness**: Retrieves relevant information for responses
-- **Memory**: Maintains conversation context
+### Streaming TTS System
+- **WebSocket Streaming**: Real-time text-to-speech using Deepgram's WebSocket API
+- **Fallback Mechanism**: Automatic fallback to REST API if streaming fails
+- **High Quality Audio**: Aura-2 model for natural voice synthesis
+- **Efficient Processing**: Optimized for low-latency audio delivery
 
 ### Voice Features
-- **Welcome Sequence**: Engaging introduction with animations
-- **Voice Input**: Record voice messages for conversation
-- **ElevenLabs TTS**: High-quality voice synthesis
-- **Interactive UI**: Dynamic elements during voice playback
+- **Welcome Sequence**: Engaging introduction with Lottie animations
+- **Voice Input**: Record voice messages for conversation using Whisper
+- **Streaming Audio**: Real-time audio generation and playback
+- **Interactive UI**: Dynamic elements with modern chat interface
+
+### Conversation Features
+- **Authentic Personality**: mAsK personality with genuine human-like responses
+- **Context Memory**: Maintains conversation state across interactions
+- **Dual Interface**: Both text and voice chat modes
+- **Error Handling**: Robust error management with user-friendly messages
 
 ## 💬 Chat Features
 
@@ -84,55 +87,61 @@ MohammedAnas Shakil Kazi is an INFP personality who embodies:
 
 ## ⚙️ Configuration
 
-### Theme Customization
-Themes can be selected from the sidebar. Each theme includes:
-- Primary color (main accents)
-- Secondary color (buttons, borders)
-- Accent color (highlights, text)
-- Background (dark gradients)
-- Surface (container backgrounds)
+### Environment Variables
+Make sure your `.env` file contains:
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+DEEPGRAM_API_KEY=your_deepgram_api_key_here
+```
 
 ### Audio Settings
-- Toggle text-to-speech on/off
-- Adjust visualizer sensitivity
-- Audio files auto-cleanup after 30 minutes
+- **Streaming TTS**: Enabled by default with WebSocket API
+- **Fallback System**: Automatic REST API fallback on streaming failure
+- **Audio Format**: Linear16 encoding, 24kHz sample rate
+- **Voice Model**: Aura-2-Arcas-EN for natural voice synthesis
+- **Auto-play**: Enabled for immediate audio response
+
+### Chat Interface
+- **Dual Modes**: Text chat and voice chat tabs
+- **Session Persistence**: Chat history maintained during session
+- **Real-time Updates**: Instant message display and audio generation
+- **Error Handling**: User-friendly error messages and recovery
 
 ## 🔧 Technical Details
 
-### Backend (`backend.py`)
-- **VoicebotBackend Class**: Handles all AI and audio processing
-- **OpenAI Integration**: GPT models for conversations
-- **Speech Recognition**: Houndify with fallbacks
-- **Text-to-Speech**: ElevenLabs API integration for natural voice output
-- **Welcome Sequence**: Interactive introduction with animations
-- **Error Handling**: Graceful fallbacks for all operations
+### Main Application (`app.py`)
+- **Streaming TTS**: Deepgram WebSocket API for real-time audio generation
+- **OpenAI Integration**: GPT-4 models for conversations with mAsK personality
+- **Speech Recognition**: Whisper API for voice-to-text conversion
+- **Fallback System**: Automatic REST API fallback if streaming fails
+- **Session Management**: Persistent chat history and state management
+- **Error Handling**: Comprehensive error handling with user feedback
 
-### Frontend (`app_frontend.py`)
-- **Streamlit UI**: Modern web interface
-- **Plotly Visualizer**: Real-time audio waveform
-- **CSS Theming**: Dynamic theme application
-- **Session Management**: Persistent chat and settings
-- **Responsive Design**: Works on desktop and mobile
+### Alternative Version (`app_elevenlabs.py`)
+- **ElevenLabs TTS**: High-quality voice synthesis with ElevenLabs API
+- **Voice Cloning**: Custom voice models for personalized responses
+- **Audio Processing**: Optimized audio generation and playback
+- **Streamlit Interface**: Modern web-based chat interface
 
 ## 🛠️ Development
 
-### Enhancing RAG System
-- Add new documents to knowledge base
-- Customize embedding models
-- Implement additional retrieval strategies
-- Optimize vector store performance
+### Enhancing TTS System
+- Implement additional Deepgram voice models
+- Add voice speed and pitch controls
+- Optimize WebSocket connection handling
+- Implement audio caching for better performance
 
 ### Voice Integration
-- Configure ElevenLabs voice settings
-- Implement additional voice models
-- Enhance voice recording quality
-- Add real-time transcription
+- Add real-time voice activity detection
+- Implement voice interruption handling
+- Enhance audio quality processing
+- Add support for multiple languages
 
 ### Extending Features
-- Add new conversation capabilities
-- Implement additional API integrations
-- Enhance memory management
-- Improve context handling
+- Add conversation export/import
+- Implement user preferences storage
+- Add more personality variations
+- Enhance error recovery mechanisms
 
 ## 📋 Requirements
 
@@ -140,43 +149,47 @@ Themes can be selected from the sidebar. Each theme includes:
 - Streamlit 1.28+
 - OpenAI API key
 - Deepgram API key
-- FAISS for vector storage
 - Internet connection
 - Microphone access (for voice features)
+- Modern web browser with audio support
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
-#### RAG System
-- **Vector store not initialized**: Run the app once to create FAISS index
-- **Knowledge retrieval issues**: Check if knowledge base is properly loaded
-- **Slow responses**: Optimize chunk size and embedding configuration
+#### Streaming TTS Issues
+- **WebSocket connection failed**: Check Deepgram API key and internet connection
+- **No audio output**: Verify browser audio permissions and settings
+- **Fallback to REST API**: Normal behavior when streaming fails, check console for details
+- **Audio quality issues**: Ensure stable internet connection for streaming
 
 #### Voice Features
-- **No intro voice**: Verify DEEPGRAM_API_KEY in .env file
-- **Recording issues**: Check microphone permissions
-- **Playback problems**: Verify browser audio settings
-- **Animation glitches**: Try refreshing the page
+- **No intro audio**: Verify assets/intro.mp3 file exists and is accessible
+- **Recording issues**: Check microphone permissions in browser
+- **Playback problems**: Verify browser audio settings and autoplay permissions
+- **Animation not loading**: Check assets/loading_animation.json file
 
 ### API Issues  
-- **OpenAI errors**: Verify API key in `.env` file
-- **Rate limiting**: Wait a moment and try again
-- **Model not found**: Update to latest OpenAI models
+- **OpenAI errors**: Verify API key in `.env` file and check usage limits
+- **Deepgram errors**: Verify API key and check account balance
+- **Rate limiting**: Wait a moment and try again, or upgrade API plan
+- **Model not found**: Update to latest model versions in code
 
 ### Installation Issues
-- **PyAudio problems**: Try `conda install pyaudio` or pre-compiled wheels
+- **deepgram-sdk problems**: Try `pip install --upgrade deepgram-sdk`
+- **Audio dependencies**: Install platform-specific audio libraries
 - **Permission errors**: Run with administrator privileges
-- **Module not found**: Ensure all requirements are installed
+- **Module not found**: Ensure all requirements are installed with `pip install -r requirements.txt`
 
 ## 🤝 Contributing
 
 Feel free to enhance mAsK with:
-- New themes and visual effects
-- Additional AI personalities  
-- Voice cloning integration
+- Additional Deepgram voice models
+- Real-time conversation features
+- Advanced streaming optimizations
 - Mobile app version
-- Advanced audio processing
+- Voice activity detection
+- Multiple language support
 
 ## 📄 License
 
