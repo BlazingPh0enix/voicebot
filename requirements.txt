@@ -7,3 +7,4 @@ websockets
 streamlit-webrtc
 streamlit-lottie
 audio-recorder-streamlit
+elevenlabs
